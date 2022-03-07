@@ -149,7 +149,7 @@ def retrieve_images(key, images_regions, input_id=-1, input_embedding=np.zeros(5
     return top_images
 
 
-def main():
+def YEmbedding():
     # pre-trained models
     model_1 = SentenceTransformer('bert-base-nli-mean-tokens')
     models = [model_1]
@@ -197,14 +197,4 @@ def main():
 
     pd.set_option('display.max_columns', None)
     #print(embedding_clusters.head(5))
-
-
-    
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    main()
-
-
-
-
 

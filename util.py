@@ -1,10 +1,10 @@
-import json
 import numpy as np
 import pandas as pd
+import json
+from openpyxl import Workbook
+
 
 ''' 1000개의 이미지에 존재하는 obj_id(중복 X) '''
-
-
 def adjColumn(imgCount):
     with open('./data/scene_graphs.json') as file:  # open json file
         data = json.load(file)
@@ -17,7 +17,7 @@ def adjColumn(imgCount):
 
         return scene_obj_id
 
-
+''' adj 생성(이미지 하나에 대한) '''
 def createAdj(imageId, adjColumn):
     with open('./data/scene_graphs.json') as file:  # open json file
         data = json.load(file)
@@ -42,4 +42,38 @@ def createAdj(imageId, adjColumn):
             adjMatrix[column][row] += 1
 
         return data_df, adjMatrix
+
+
+''' 
+Y data 생성을 위해 image에 대한 text description을 이미지 별로 모음
+
+jsonpath : './data/region_descriptions.json'
+xlxspath : './data/image_regions.xlsx'
+'''
+def jsontoxml(imgCnt, jsonpath, xlsxpath) :
+    with open(jsonpath) as file:  # open json file
+        data = json.load(file)
+        wb = Workbook()  # create xlsx file
+        ws = wb.active  # create xlsx sheet
+        ws.append(['image_id', 'region_sentences'])
+
+        phrase = []
+
+        q = 0
+        for i in data:
+            if q == imgCnt:
+                break
+            regions = i.get('regions')
+            imgId = regions[0].get('image_id')
+            k = 0
+            for j in regions:
+                if k == 7:
+                    break
+                phrase.append(j.get('phrase'))
+                k += 1
+            sentences = ','.join(phrase)
+            ws.append([imgId, sentences])
+            phrase = []
+            q += 1
+        wb.save(xlsxpath)
 
