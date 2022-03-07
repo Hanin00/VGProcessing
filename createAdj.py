@@ -5,6 +5,14 @@ import pandas as pd
 
 # for문 개수 통일해서 columns 통일하기 -> 적은 경우 padding 넣어야함. (이때 column 값은?)
 
+"""
+    한 이미지당 모든 object 가져와서 리스트로 만들고 embedding(word2vec)
+    인접행렬(relationship) 과 feature(object id) 행렬 만들기 -> 
+    object명 set으로 안겹치게 column 명... 걍 object id 중에서 cite 많이 된 순서로.
+    
+    
+    Column, Row 명이 object_id인 df 및 adjMatrix 반환
+"""
 
 def createAdj(imageId) :
     with open('./data/scene_graphs.json') as file:  # open json file
@@ -33,6 +41,6 @@ def createAdj(imageId) :
             column = adjColumn.index(subject[q])
             adjMatrix[column][row] += 1
 
-        print(data_df)
+        return data_df, adjMatrix
 
 

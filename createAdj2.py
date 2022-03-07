@@ -2,6 +2,8 @@ import json
 import numpy as np
 import pandas as pd
 
+
+# 인접행렬 반환
 with open('./data/scene_graphs.json') as file:  # open json file
     data = json.load(file)
     # 각 이미지 별로 obj, relationship 가져와서 인접 행렬을 만듦

@@ -1,6 +1,10 @@
 import json
 from openpyxl import Workbook
 
+
+"""
+    Y data 생성을 위해 image에 대한 text description을 이미지 별로 모음
+"""
 with open('./data/region_descriptions.json') as file:   # open json file
     data = json.load(file)
     wb = Workbook() # create xlsx file
