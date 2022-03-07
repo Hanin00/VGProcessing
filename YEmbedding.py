@@ -4,20 +4,11 @@ import numpy as np
 from visual_genome import api as vg
 import urllib.request
 from PIL import Image
-import tensorflow as tf
-import json
 import nltk
-import time
-import torch
-import re
-import seaborn as sns
 import pandas as pd
-from nltk.cluster import KMeansClusterer
-from sklearn.metrics.pairwise import cosine_similarity
-from sentence_transformers import SentenceTransformer, util
+from sentence_transformers import SentenceTransformer
 from nltk.cluster import KMeansClusterer
 from scipy.spatial import distance_matrix, distance
-from sklearn.manifold import TSNE
 
 def visualize_regions(image, regions):
     fig = plt.gcf()
@@ -143,8 +134,6 @@ def retrieve_images(key, images_regions, input_id=-1, input_embedding=np.zeros(5
     top_k = 10
 
     if input_id > 0:
-        # top_k results to return
-        print('Reference image:', input_id)
         retrieve_image(input_id)
         distances_df = find_distances(images_regions, input_id, key)
     else:
@@ -154,7 +143,6 @@ def retrieve_images(key, images_regions, input_id=-1, input_embedding=np.zeros(5
     print("Top", top_k, "most similar images to image", input_id, "in Visual Genome:")
     for index, row in top_images.iterrows():
         im_id = int(row.image_id)
-        print("Image id:", im_id, "Euclidean distance: %.4f" % (row.distances))
 
         # find similar images from api and show
         retrieve_image(im_id)
@@ -172,8 +160,6 @@ def main():
     for i in range(len(image_regions['region_sentences'])):
         image_regions["region_sentences"][i] = image_regions["region_sentences"][i].split(',')
 
-    print(image_regions["region_sentences"][3])
-    #image_regions["region_sentences"] = image_regions["region_sentences"].apply(eval)
 
     regions = image_regions["region_sentences"].tolist()
 
@@ -204,11 +190,13 @@ def main():
     embeddings_method = "embeddings_1"
     pd.set_option('display.max_columns', None)
 
+    print(len)
+    print(image_regions)
     print(image_regions.head(5))
     embedding_clusters = make_clusters(embeddings_method, image_regions, n_clusters)
 
     pd.set_option('display.max_columns', None)
-    print(embedding_clusters.head(5))
+    #print(embedding_clusters.head(5))
 
 
     

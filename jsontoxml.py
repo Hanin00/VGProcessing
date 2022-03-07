@@ -15,7 +15,7 @@ with open('./data/region_descriptions.json') as file:   # open json file
 
     q = 0
     for i in data:
-        if q==700 :
+        if q==1000 :
             break
         regions = i.get('regions')
         imgId = regions[0].get('image_id')
