@@ -16,14 +16,12 @@ import pandas as pd
     Column, Row 명이 object_id인 df 및 adjMatrix 반환
 """
 
-
-
 ''' 1000개의 이미지에 존재하는 obj_id(중복 X) '''
-def adjColumn( ):
+def adjColumn(imgCount):
     with open('./data/scene_graphs.json') as file:  # open json file
         data = json.load(file)
         object = []
-        for i in range(1000):
+        for i in range(imgCount):
             imageDescriptions = data[i]["objects"]
             for j in range(len(imageDescriptions)):  # 이미지의 object 개수만큼 반복
                 object.append(imageDescriptions[j]['object_id'])
@@ -58,13 +56,7 @@ def createAdj(imageId, adjColumn) :
         return data_df, adjMatrix
 
 
-
-
-
-
-
-
-
+'''
 def createAdj(imageId) :
     with open('./data/scene_graphs.json') as file:  # open json file
         data = json.load(file)
@@ -92,3 +84,4 @@ def createAdj(imageId) :
             adjMatrix[column][row] += 1
 
         return data_df, adjMatrix
+'''

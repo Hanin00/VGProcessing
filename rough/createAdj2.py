@@ -10,7 +10,7 @@ import pandas as pd
 
 
 ''' 1000개의 이미지에 존재하는 obj_id(중복 X) '''
-with open('./data/scene_graphs.json') as file:  # open json file
+with open('../data/scene_graphs.json') as file:  # open json file
     data = json.load(file)
     object = []
     for i in range(1000):
@@ -24,7 +24,7 @@ with open('./data/scene_graphs.json') as file:  # open json file
     print("scene_graph_obj_len : ", len(scene_obj))
 
 # 인접행렬 반환
-with open('./data/scene_graphs.json') as file:  # open json file
+with open('../data/scene_graphs.json') as file:  # open json file
     data = json.load(file)
     # 각 이미지 별로 obj, relationship 가져와서 인접 행렬을 만듦
     # 해당 모듈은 이미지 하나에 대한 인접행렬 만듦
