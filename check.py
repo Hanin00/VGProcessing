@@ -3,36 +3,32 @@ import json
 import numpy as np
 import pandas as pd
 
+#단어 빈도수 기반 임베딩을 하고 있음.. 되는거 하자 되는거.
+
 img_id = 1
 #img_cnt = 1000
 #adjColumn, xWords = ut.adjColumn_kv(img_cnt)
 
-with open('./data/adjColumn.txt', "r") as file:
+with open('./data/xWords.txt', "r") as file:
     strings = file.readlines()[0]
-    adjIdx = strings.split(',')
+    xWords = strings.split(',')
 
-with open('./data/scene_graphs.json')as file:  # open json file
-    data = json.load(file)
-    # 각 이미지 별로 obj, relationship 가져와서 인접 행렬을 만듦
-    # 해당 모듈은 이미지 하나에 대한 인접행렬 만듦
+from sklearn.feature_extraction.text import CountVectorizer
 
-    # i는 image id
-    imageDescriptions = data[img_id]["relationships"]
-    object = []
-    subject = []
+vector = CountVectorizer()
+print(vector.fit_transform(xWords).toarray())
+print(vector.vocabulary_)
 
-    for j in range(len(imageDescriptions)):  # 이미지의 object 개수만큼 반복
-        object.append(imageDescriptions[j]['object_id'])
-        subject.append(imageDescriptions[j]['subject_id'])
+print(vector.vocabulary_.get('shade'))
+xEmb = []
 
-    adjMatrix = np.zeros((len(adjIdx), len(adjIdx)))
+for i in range(len(xWords)) :
+    print(xWords[i])
+print(xEmb)
 
-    # ralationship에 따른
-    for q in range(len(object)):
-        row = adjIdx.index(str(object[q]))
-        column = adjIdx.index(str(subject[q]))
-        #print("row : ", row)
-        #print("column : ", column)
-        adjMatrix[row][column] += 1.0
 
-    print(adjMatrix[23][8]) #인접행렬에서 값 찍히는 것 확인함
+# # i로 호출 후 list 에 저장 -> id 다른데 값 동일한 경우 있음.
+# for i in range(xWords) :
+#     if i == vector.vocabulary_.get(i) :
+#         xEmb += vector.vocabulary_.get(i)
+# print(xEmb)
