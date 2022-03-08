@@ -4,7 +4,6 @@ import pandas as pd
 
 import sys
 
-
 def main():
     img_id = 1
     img_cnt = 1000
@@ -14,16 +13,13 @@ def main():
     '''개수 확인'''
     df_adj, adjMatrix = ut.createAdj(img_id, adjColumn)
     print("adjMatrix : ", adjMatrix)
+    print("adjMatrix size : ", adjMatrix.shape)
 
     jsonpath= './data/region_descriptions.json'
     xlxspath= './data/image_regions.xlsx'
     ut.jsontoxml(img_cnt, jsonpath, xlxspath)
 
-
     yed.YEmbedding(xlxspath)
-
-
-
 
 
 # Press the green button in the gutter to run the script.
