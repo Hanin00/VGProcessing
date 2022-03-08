@@ -24,8 +24,6 @@ with open('./data/scene_graphs.json')as file:  # open json file
     for j in range(len(imageDescriptions)):  # 이미지의 object 개수만큼 반복
         object.append(imageDescriptions[j]['object_id'])
         subject.append(imageDescriptions[j]['subject_id'])
-        print("object_id : ",imageDescriptions[j]['object_id'])
-        print("subject_id : ", imageDescriptions[j]['subject_id'])
 
     adjMatrix = np.zeros((len(adjIdx), len(adjIdx)))
 

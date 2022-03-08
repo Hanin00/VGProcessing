@@ -13,25 +13,18 @@ def main():
 
     '''개수 확인'''
     df_adj, adjMatrix = ut.createAdj(img_id, adjColumn)
+    print("adjMatrix : ", adjMatrix)
 
-    df_adj_has_1 = df_adj['5045'].str.contains("1.")
-    print(df_adj_has_1)
-    # print("df_adj : ", df_adj)
-    # print("adjMatrix : ", adjMatrix)
-    #
-
-
-
-
-
-'''
     jsonpath= './data/region_descriptions.json'
     xlxspath= './data/image_regions.xlsx'
     ut.jsontoxml(img_cnt, jsonpath, xlxspath)
 
 
+    yed.YEmbedding(xlxspath)
 
-    yed.YEmbedding(xlxspath)'''
+
+
+
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
