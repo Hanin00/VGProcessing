@@ -3,9 +3,7 @@ import json
 
 imgCount = 1000
 ''' object_id, object_name의 개수가 일치하지 않는 문제 -> 동일 id에 이름 두 개씩 들어가 있는 경우 발견
-    -> 이름을 합침
-
-'''
+    -> 이름을 합침 '''
 
 
 

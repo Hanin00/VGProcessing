@@ -83,7 +83,10 @@ def jsontoxml(imgCnt, jsonpath, xlsxpath) :
         wb.save(xlsxpath)
 
 
-''' 1000개의 이미지에 존재하는 obj_name(중복 X) > Featuremap object_name Embedding 원본'''
+''' 1000개의 이미지에 존재하는 obj_name(중복 X) > Featuremap object_name Embedding 원본
+    object_id, object_name의 개수가 일치하지 않는 문제 -> 동일 id에 이름 두 개씩 들어가 있는 경우 발견
+    -> 이름을 합침 '''
+
 def adjColumn_kv(imgCount):
     with open('./data/scene_graphs.json') as file:  # open json file
         data = json.load(file)
