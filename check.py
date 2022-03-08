@@ -16,16 +16,20 @@ with open('./data/xWords.txt', "r") as file:
 from sklearn.feature_extraction.text import CountVectorizer
 
 vector = CountVectorizer()
-print(vector.fit_transform(xWords).toarray())
-print(vector.vocabulary_)
-
-print(vector.vocabulary_.get('shade'))
-xEmb = []
-
-for i in range(len(xWords)) :
-    print(xWords[i])
-print(xEmb)
-
+tf = vector.fit_transform(xWords)
+print(tf)
+print(tf.toarray())
+print(tf.shape) # (32121,2330) 확인함
+#
+# print(vector.fit_transform(xWords).toarray())
+# print(vector.vocabulary_)
+#
+# print(vector.vocabulary_.get('shade'))
+# xEmb = []
+#
+# for i in range(len(xWords)) :
+#     print(xWords[i])
+# print(xEmb)
 
 # # i로 호출 후 list 에 저장 -> id 다른데 값 동일한 경우 있음.
 # for i in range(xWords) :
