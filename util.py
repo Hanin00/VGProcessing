@@ -118,10 +118,30 @@ def adjColumn_kv(imgCount):
                 val += (dict[i])
 
             val += dict[i]
-            print(dict[i])
-            print(type(dict[i]))
-
-        print("keys : ", len(keys))
-        print("val : ", len(val))
-
         return keys, val
+
+def featureMatrix() :
+    with open('./data/xWords.txt', "r") as file:
+        strings = file.readlines()[0]
+        xWords = strings.split(',')
+    print(len(xWords))
+
+    from sklearn.feature_extraction.text import CountVectorizer
+
+    vector = CountVectorizer()
+    tf = vector.fit_transform(xWords)
+    tfArray = tf.toarray()
+    print(tf)
+    print(tf.toarray())
+    print(tf.shape)  # (32121,2330) 확인함
+    print(tfArray[0])
+    print(type(tfArray[0]))
+    print(tf[0])
+    print(type(tf[0]))
+
+    print('indices:', tf.indices)
+
+    xEmbedding = tf.indices
+    print(xEmbedding)
+    print(type(xEmbedding))
+

@@ -9,9 +9,21 @@ img_id = 1
 img_cnt = 1000
 adjColumn, xWords = ut.adjColumn_kv(img_cnt)
 
+print(len(xWords))
 
-print("adjColumn : ", len(adjColumn))
-print("xWords : ", len(xWords))
+#31310
+from sklearn.feature_extraction.text import CountVectorizer
+
+vector = CountVectorizer()
+tf = vector.fit_transform(xWords)
+tfArray = tf.toarray()
+
+print('indices:', tf.indices)
+
+xEmbedding = tf.indices
+print(xEmbedding)
+print(type(xEmbedding))
+
 
 with open('./data/xWords.txt', "r") as file:
     strings = file.readlines()[0]
@@ -35,6 +47,4 @@ print('indices:', tf.indices)
 
 xEmbedding = tf.indices
 print(xEmbedding)
-print(type(xEmbedding))
-
 

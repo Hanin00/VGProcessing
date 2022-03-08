@@ -10,10 +10,3 @@ img_cnt = 1000
 adjColumn, xWords = ut.adjColumn_kv(img_cnt)
 
 print(len(xWords))
-
-
-'''
-from gensim.models.word2vec import Word2Vec
-
-model = Word2Vec(xWords)
-print '''
