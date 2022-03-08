@@ -34,13 +34,13 @@ with open('../data/scene_graphs.json') as file:  # open json file
     object = []
     subject = []
 
-    """
+
     for j in range(len(imageDescriptions)):  # 이미지의 object 개수만큼 반복
         object.append(imageDescriptions[j]['object_id'])
         subject.append(imageDescriptions[j]['subject_id'])
     adjColumn = list(set(object + subject))
     print(adjColumn[0])
-    """
+
 
     adjMatrix = np.zeros((len(scene_obj), len(scene_obj)))
     data_df = pd.DataFrame(adjMatrix)

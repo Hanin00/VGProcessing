@@ -10,32 +10,34 @@ from sentence_transformers import SentenceTransformer
 from nltk.cluster import KMeansClusterer
 from scipy.spatial import distance_matrix, distance
 
+
 def visualize_regions(image, regions):
     fig = plt.gcf()
     fig.set_size_inches(18.5, 10.5)
-    img = Image.open(urllib.request.urlopen(image.url))   # url from API
+    img = Image.open(urllib.request.urlopen(image.url))  # url from API
     plt.imshow(img)
     ax = plt.gca()
-    for region in regions:                                # visualize regions
+    for region in regions:  # visualize regions
         ax.add_patch(Rectangle((region.x, region.y),
                                region.width,
                                region.height,
                                fill=False,
                                edgecolor='red',
                                linewidth=3))
-        ax.text(region.x, region.y, region.phrase, style='italic', bbox={'facecolor':'white', 'alpha':0.7, 'pad':10})
+        ax.text(region.x, region.y, region.phrase, style='italic', bbox={'facecolor': 'white', 'alpha': 0.7, 'pad': 10})
     fig = plt.gcf()
     plt.tick_params(labelbottom='off', labelleft='off')
     plt.show()
 
+
 def retrieve_image(image_id):
     # find the image from api
-    image = vg.get_image_data(id=image_id)   # VG api works here
+    image = vg.get_image_data(id=image_id)  # VG api works here
     if image:
-        print ("Image data:", image)
+        print("Image data:", image)
         reg = vg.get_region_descriptions_of_image(id=image_id)
         # show images
-        visualize_regions(image, reg[:8])    # call with fewer regions for better visualization
+        visualize_regions(image, reg[:8])  # call with fewer regions for better visualization
 
 
 def get_embeddings(model, region_sentences):
@@ -63,9 +65,10 @@ def clustering_question(images_regions, key, NUM_CLUSTERS):
 def nltk_inertia(feature_matrix, centroid):
     sum_ = []
     for i in range(feature_matrix.shape[0]):
-        sum_.append(np.sum((feature_matrix[i] - centroid[i])**2))
+        sum_.append(np.sum((feature_matrix[i] - centroid[i]) ** 2))
 
     return sum(sum_)
+
 
 def number_of_clusters(image_regions, key):
     sse = []
@@ -77,27 +80,29 @@ def number_of_clusters(image_regions, key):
 
     # Plot sse against k
     plt.figure(figsize=(6, 6))
-    plt.title('Elbow method for '+key)
+    plt.title('Elbow method for ' + key)
     plt.plot(list_k, sse, '-o')
     plt.xlabel(r'Number of clusters k')
     plt.ylabel('Sum of squared distance')
     plt.show()
+
+
 """
 for key in key_list:
     number_of_clusters(image_regions, key)
 """
 
+
 def make_clusters(key, images_regions, n_clusters):
-    data, assigned_clusters = clustering_question(images_regions, key, NUM_CLUSTERS = n_clusters)
+    data, assigned_clusters = clustering_question(images_regions, key, NUM_CLUSTERS=n_clusters)
     # Compute centroid distance to the data
     data['distance_from_centroid'] = data.apply(distance_from_centroid, axis=1)
     return data
 
+
 def distance_from_centroid(row):
     # type of emb and centroid is different, hence using tolist below
     return distance_matrix([row['embeddings_1']], [row['centroid'].tolist()])[0][0]
-
-
 
 
 def find_distances(images_regions, input_id, key, input_embedding=np.zeros(5)):
@@ -149,17 +154,17 @@ def retrieve_images(key, images_regions, input_id=-1, input_embedding=np.zeros(5
     return top_images
 
 
-def YEmbedding():
+# xlxspath : './data/image_regions.xlsx'
+def YEmbedding(xlxspath):
     # pre-trained models
     model_1 = SentenceTransformer('bert-base-nli-mean-tokens')
     models = [model_1]
 
     ## Read images and their descriptions
-    image_regions = pd.read_excel("./data/image_regions.xlsx")
+    image_regions = pd.read_excel(xlxspath)
 
     for i in range(len(image_regions['region_sentences'])):
         image_regions["region_sentences"][i] = image_regions["region_sentences"][i].split(',')
-
 
     regions = image_regions["region_sentences"].tolist()
 
@@ -192,9 +197,8 @@ def YEmbedding():
 
     print(len)
     print(image_regions)
-    print(image_regions.head(5))
+    print("img_regions : ", image_regions.head(5))
     embedding_clusters = make_clusters(embeddings_method, image_regions, n_clusters)
 
     pd.set_option('display.max_columns', None)
-    #print(embedding_clusters.head(5))
-
+    print("embedding_cluster : ", embedding_clusters.head(5))

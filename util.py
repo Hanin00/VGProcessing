@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import json
 from openpyxl import Workbook
+import util as ut
 
 
 ''' 1000개의 이미지에 존재하는 obj_id(중복 X) '''
@@ -28,6 +29,10 @@ def createAdj(imageId, adjColumn):
         imageDescriptions = data[imageId]["relationships"]
         object = []
         subject = []
+
+        for j in range(len(imageDescriptions)):  # 이미지의 object 개수만큼 반복
+            object.append(imageDescriptions[j]['object_id'])
+            subject.append(imageDescriptions[j]['subject_id'])
 
         adjMatrix = np.zeros((len(adjColumn), len(adjColumn)))
         data_df = pd.DataFrame(adjMatrix)
@@ -77,3 +82,25 @@ def jsontoxml(imgCnt, jsonpath, xlsxpath) :
             q += 1
         wb.save(xlsxpath)
 
+
+''' 1000개의 이미지에 존재하는 obj_name(중복 X) > Featuremap object_name Embedding 원본'''
+def adjColumn_kv(imgCount):
+    with open('./data/scene_graphs.json') as file:  # open json file
+        data = json.load(file)
+        dict = {}
+
+        # dict 생성(obj_id : obj_name)
+        for i in range(imgCount):
+            imageDescriptions = data[i]["objects"]
+            for j in range(len(imageDescriptions)):  # 이미지의 object 개수만큼 반복
+                obj_id = imageDescriptions[j]['object_id']
+                obj_name = imageDescriptions[j]['names']
+                dict[obj_id] = obj_name
+
+        keys = sorted(dict)
+        val = []
+
+        for i in keys:
+            val += dict[i]
+
+        return keys, val
