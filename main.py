@@ -14,8 +14,6 @@ def main():
 
 
 
-
-
     jsonpath= './data/region_descriptions.json'
     xlxspath= './data/image_regions.xlsx'
     ut.jsontoxml(img_cnt, jsonpath, xlxspath)

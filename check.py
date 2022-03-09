@@ -1,50 +1,31 @@
 import util as ut
-import json
-import numpy as np
-import pandas as pd
-
-#단어 빈도수 기반 임베딩을 하고 있음.. 되는거 하자 되는거.
+# 단어 빈도수 기반 임베딩을 하고 있음.. 되는거 하자 되는거.
 
 img_id = 1
 img_cnt = 1000
 adjColumn, xWords = ut.adjColumn_kv(img_cnt)
 
-print(len(xWords))
+# for i in range(len(xWords)) :
+#     xWords[i] = xWords[i].replace(' ','')
 
-#31310
-from sklearn.feature_extraction.text import CountVectorizer
+a = []
+a.append(xWords)
 
-vector = CountVectorizer()
-tf = vector.fit_transform(xWords)
-tfArray = tf.toarray()
+from gensim.models import Word2Vec
+#model = Word2Vec(sentences=a, vector_size=10, window=1, min_count=5, workers=4, sg=0)
 
-print('indices:', tf.indices)
-
-xEmbedding = tf.indices
-print(xEmbedding)
-print(type(xEmbedding))
+model = Word2Vec(a,window = 5,min_count=2,sg=1,iter=10000)
+print(model.wv['shade'])
+print(model.wv['walksign'])
 
 
-with open('./data/xWords.txt', "r") as file:
-    strings = file.readlines()[0]
-    xWords = strings.split(',')
-print(len(xWords))
+'''
+for i in range(len(a[0])) :
+    print("a : ",a[0][i],"   model.wv[a[0][i]] : " ,model.wv[a[0][i]])'''
 
-from sklearn.feature_extraction.text import CountVectorizer
+'''all_vectors = []
+for i in a[0]:
+    vectors = model.wv[i]
+    all_vectors.append(vectors)
 
-vector = CountVectorizer()
-tf = vector.fit_transform(xWords)
-tfArray = tf.toarray()
-print(tf)
-print(tf.toarray())
-print(tf.shape) # (32121,2330) 확인함
-print(tfArray[0])
-print(type(tfArray[0]))
-print(tf[0])
-print(type(tf[0]))
-
-print('indices:', tf.indices)
-
-xEmbedding = tf.indices
-print(xEmbedding)
-
+print(len(all_vectors))'''

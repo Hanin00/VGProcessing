@@ -83,6 +83,48 @@ def jsontoxml(imgCnt, jsonpath, xlsxpath) :
         wb.save(xlsxpath)
 
 
+
+    ''' 
+feature matrix 2안 
+scene graph에서 object-predicate-subject를 scenetence로 묶어서 임베딩 
+-> 질문 : 이때 각 단어에 대한 임베딩은 어케 구할건지? 
+    일일이 비교해서 구해야 하는지? 
+    word가 아니고 phrase인 경우에는? 
+    padding?
+    '''
+def featureBase(imgCnt, jsonpath, xlsxpath) :
+    with open(jsonpath) as file:  # open json file
+        data = json.load(file)
+        wb = Workbook()  # create xlsx file
+        ws = wb.active  # create xlsx sheet
+        ws.append(['image_id', 'region_sentences'])
+
+        phrase = []
+
+        q = 0
+        for i in data:
+            if q == imgCnt:
+                break
+            regions = i.get('regions')
+            imgId = regions[0].get('image_id')
+            k = 0
+            for j in regions:
+                if k == 7:
+                    break
+                phrase.append(j.get('phrase'))
+                k += 1
+            sentences = ','.join(phrase)
+            ws.append([imgId, sentences])
+            phrase = []
+            q += 1
+        wb.save(xlsxpath)
+
+
+
+
+
+
+
 ''' 1000개의 이미지에 존재하는 obj_name(중복 X) > Featuremap object_name Embedding 원본
     object_id, object_name의 개수가 일치하지 않는 문제 -> 동일 id에 이름 두 개씩 들어가 있는 경우 발견
     -> 이름을 합침 '''
@@ -131,17 +173,18 @@ def featureMatrix() :
     vector = CountVectorizer()
     tf = vector.fit_transform(xWords)
     tfArray = tf.toarray()
-    print(tf)
-    print(tf.toarray())
-    print(tf.shape)  # (32121,2330) 확인함
-    print(tfArray[0])
-    print(type(tfArray[0]))
-    print(tf[0])
-    print(type(tf[0]))
-
-    print('indices:', tf.indices)
-
     xEmbedding = tf.indices
-    print(xEmbedding)
-    print(type(xEmbedding))
+
+    return xEmbedding
+
+''' obj name 단순 임베딩(obj_id 목록과 동일한 순서의 name을 한 sentence로 보고 word2vec 한 값)'''
+def simpleEmbedding(xWords):
+    a = []
+    a.append(xWords)
+
+    from gensim.models import Word2Vec
+    model = Word2Vec(sentences=a, vector_size=100, window=5, min_count=5, workers=4, sg=0)
+
+    return model
+
 
