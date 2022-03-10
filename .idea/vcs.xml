@@ -3,5 +3,6 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/api/visual_genome_python_driver" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/fastText" vcs="Git" />
   </component>
 </project>

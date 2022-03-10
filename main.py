@@ -7,12 +7,9 @@ def main():
     adjColumn, xWords = ut.adjColumn_kv(img_cnt)
     # 개수 동일, 순서는 X sorted로 정렬하면 list로 바뀌더라고..? for문으로 호출하면 될 듯..?헐랭 해결해따
     '''개수 확인'''
+
     df_adj, adjMatrix = ut.createAdj(img_id, adjColumn)
-    print("adjMatrix : ", adjMatrix)
-    print("adjMatrix size : ", adjMatrix.shape)
-
-
-
+    featureEmbedding = ut.objNameEmbedding(xWords)
 
     jsonpath= './data/region_descriptions.json'
     xlxspath= './data/image_regions.xlsx'

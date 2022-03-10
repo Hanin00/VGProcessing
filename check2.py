@@ -6,7 +6,6 @@ imgCnt = 1000
 jsonpath = './data/scene_graphs.json'
 xlsxpath = './data/scene_sentence.xlsx'
 
-
 adjColumn, xWords = ut.adjColumn_kv(imgCnt)
 
 with open(jsonpath) as file:  # open json file
@@ -32,6 +31,14 @@ with open(jsonpath) as file:  # open json file
         imgId = i.get('image_id')
         #relationship
         relationships = i.get('relationships')
+        objects = i.get('objects')
+        objDict = {}
+
+        maxlen = 0
+        #objId, Name 목록
+        for k in range(len(objects)) :
+            objDict[objects[k].get('object_id')] = objects[k].get('names')
+
         predicateId=subjectId= objectId = []
         predicate= subjectName= objectName = []
         for j in range(len(relationships)) :
@@ -40,16 +47,24 @@ with open(jsonpath) as file:  # open json file
             subjectId.append(relationships[j].get('subject_id'))
             objectId.append(relationships[j].get('object_id'))
 
-            subjectName.append(xWords[adjColumn.index(subjectId[j])])
-            objectName.append(xWords[adjColumn.index(objectId[j])])
-
-            sentences.append(predicate+subjectName+objectName)
-            usedId.append(predicateId+subjectId+objId)
+            relationships[j].get('object_id')
+            objects(relationships[j].get('object_id'))
+            sentences.append(predicate + subjectName + objectName)
+            usedId.append(predicateId + subjectId + objId)
 
         ws.append([imgId, sentences, usedId])
         sentences, usedId = []
         q += 1
     wb.save(xlsxpath)
+
+
+
+
+
+'''         subjectName.append(xWords[adjColumn.index(subjectId[j])])
+            objectName.append(xWords[adjColumn.index(objectId[j])])
+'''
+
 
 '''
     q = 0

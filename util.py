@@ -3,7 +3,12 @@ import pandas as pd
 import json
 from openpyxl import Workbook
 import util as ut
+from gensim.models import FastText
+from tqdm import tqdm
+import util as ut
 
+
+np.set_printoptions(linewidth=np.inf)
 
 ''' 1000개의 이미지에 존재하는 obj_id(중복 X) '''
 def adjColumn(imgCount):
@@ -84,43 +89,20 @@ def jsontoxml(imgCnt, jsonpath, xlsxpath) :
 
 
 
-    ''' 
-feature matrix 2안 
-scene graph에서 object-predicate-subject를 scenetence로 묶어서 임베딩 
--> 질문 : 이때 각 단어에 대한 임베딩은 어케 구할건지? 
-    일일이 비교해서 구해야 하는지? 
-    word가 아니고 phrase인 경우에는? 
-    padding?
-    '''
-def featureBase(imgCnt, jsonpath, xlsxpath) :
-    with open(jsonpath) as file:  # open json file
-        data = json.load(file)
-        wb = Workbook()  # create xlsx file
-        ws = wb.active  # create xlsx sheet
-        ws.append(['image_id', 'region_sentences'])
 
-        phrase = []
+''' obj name 단순 임베딩(fasttext로 임베딩 한 값)'''
+def objNameEmbedding(xWords) :
+    a = []
+    a.append(xWords)
 
-        q = 0
-        for i in data:
-            if q == imgCnt:
-                break
-            regions = i.get('regions')
-            imgId = regions[0].get('image_id')
-            k = 0
-            for j in regions:
-                if k == 7:
-                    break
-                phrase.append(j.get('phrase'))
-                k += 1
-            sentences = ','.join(phrase)
-            ws.append([imgId, sentences])
-            phrase = []
-            q += 1
-        wb.save(xlsxpath)
+    model = FastText(a, vector_size=10, workers=4, sg=1, word_ngrams=1)
 
+    # for i in a :
+    embedding = []
+    for i in xWords:
+        embedding.append(model.wv[i])
 
-
+    return embedding
 
 
 
@@ -162,29 +144,17 @@ def adjColumn_kv(imgCount):
             val += dict[i]
         return keys, val
 
-def featureMatrix() :
-    with open('./data/xWords.txt', "r") as file:
-        strings = file.readlines()[0]
-        xWords = strings.split(',')
-    print(len(xWords))
 
-    from sklearn.feature_extraction.text import CountVectorizer
 
-    vector = CountVectorizer()
-    tf = vector.fit_transform(xWords)
-    tfArray = tf.toarray()
-    xEmbedding = tf.indices
 
-    return xEmbedding
 
-''' obj name 단순 임베딩(obj_id 목록과 동일한 순서의 name을 한 sentence로 보고 word2vec 한 값)'''
-def simpleEmbedding(xWords):
-    a = []
-    a.append(xWords)
-
-    from gensim.models import Word2Vec
-    model = Word2Vec(sentences=a, vector_size=100, window=5, min_count=5, workers=4, sg=0)
-
-    return model
+''' 
+feature matrix 2안 
+scene graph에서 object-predicate-subject를 scenetence로 묶어서 임베딩 
+-> 질문 : 이때 각 단어에 대한 임베딩은 어케 구할건지? 
+    일일이 비교해서 구해야 하는지? 
+    word가 아니고 phrase인 경우에는? 
+    padding?
+    '''
 
 
