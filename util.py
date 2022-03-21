@@ -7,7 +7,6 @@ from gensim.models import FastText
 from tqdm import tqdm
 import util as ut
 
-
 np.set_printoptions(linewidth=np.inf)
 
 ''' 1000개의 이미지에 존재하는 obj_id(중복 X) '''
@@ -66,7 +65,6 @@ def jsontoxml(imgCnt, jsonpath, xlsxpath) :
         wb = Workbook()  # create xlsx file
         ws = wb.active  # create xlsx sheet
         ws.append(['image_id', 'region_sentences'])
-
         phrase = []
 
         q = 0
@@ -88,13 +86,10 @@ def jsontoxml(imgCnt, jsonpath, xlsxpath) :
         wb.save(xlsxpath)
 
 
-
-
 ''' obj name 단순 임베딩(fasttext로 임베딩 한 값)'''
 def objNameEmbedding(xWords) :
     a = []
     a.append(xWords)
-
     model = FastText(a, vector_size=10, workers=4, sg=1, word_ngrams=1)
 
     # for i in a :
@@ -103,7 +98,6 @@ def objNameEmbedding(xWords) :
         embedding.append(model.wv[i])
 
     return embedding
-
 
 
 

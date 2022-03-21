@@ -49,10 +49,8 @@ class SkipConnection(nn.Module):
 
     def __init__(self, in_dim, out_dim):
         super(SkipConnection, self).__init__()
-
         self.in_dim = in_dim
         self.out_dim = out_dim
-
         self.linear = nn.Linear(in_dim, out_dim, bias=False)
 
     def forward(self, in_x, out_x):
@@ -91,7 +89,6 @@ class GatedSkipConnection(nn.Module):
 
 '''GCNBlock: node feature matrix와 adjacency matrix의 list를 받아 원하는 갯수의 GCNLayer를 통과시킨 후, (gated)skip connection을 적용하는 module'''
 class GCNBlock(nn.Module):
-
     def __init__(self, n_layer, in_dim, hidden_dim, out_dim, n_atom, bn=True, sc='gsc'):
         super(GCNBlock, self).__init__()
 
