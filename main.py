@@ -45,13 +45,17 @@ def main():
     img_id = 1
     img_cnt = 1000
 
-    adjColumn = ["man", "window", "person", "tree", "building", "shirt", "wall", "woman",
-                 "sign", "sky", "ground", "light", "grass", "clud", "pole", "car", "table",
-                 "leaf", "hand", "leg", "head", "water", "hair", "people", "ear",
-                 "eye", "shoe", "plate", "flower", "line", "wheel", "door",
-                 "glass", "chair", "letter", "pant", "fence", "train", "floor",
-                 "street", "road", "hat", "shadow", "snow", "jacket",
-                 "boy", "boat", "rock", "handle"]
+    #adjColumn = ut.adjColumn(img_cnt)
+
+    adjColumn = ['window', 'building', 'car', 'tree', 'person', 'man', 'wall', 'chair', 'sign', 'woman', 'table', 'light',
+     'sidewalk', 'pole', 'street', 'shirt', 'sky', 'road', 'door', 'water', 'leaves', 'floor', 'tire', 'people', 'line',
+     'leg', 'handle', 'grass', 'desk', 'lamp', 'trees', 'windows', 'plate', 'keyboard', 'head', 'tile', 'shelf',
+     'plant', 'boat', 'book', 'ground', 'bag', 'monitor', 'rock', 'box', 'wheel', 'hair', 'picture', 'jacket', 'pillow',
+     'fence', 'shadow', 'glass', 'bike', 'pants', 'flowers', 'letter', 'van', 'roof', 'cloud', 'cabinet', 'house',
+     'cup', 'brick', 'frame', 'leaf', 'flower', 'umbrella', 'paper', 'counter', 'flag', 'mouse', 'bottle', 'hat',
+     'computer', 'bowl', 'vehicle', 'clouds', 'balcony', 'mirror', 'pot', 'truck', 'books', 'lights', 'ceiling',
+     'bench', 'buildings', 'stripe', 'bush', 'stone', 'post', 'hand', 'lines', 'duck', 'bicycle', 'eye', 'drawer',
+     'cars', 'awning', 'license plate']
 
     # textEmbedding하기 위한 이미지별 phrase 모아서 xlsx로 변경
     jsonpath = './data/region_descriptions.json'
@@ -60,23 +64,9 @@ def main():
 
     # obj에 대한 text embedding 값 -> 모든 objName에 대해 동일값 들어감.
     # adjColumn, xWords = ut.adjColumn_kv(img_cnt)
-    # X - AdjMatrix(numpy.ndarray, 31310x31310)
+
+    # X - AdjMatrix(numpy.ndarray, 100x100)
     adjMatrix = ut.createAdj(img_id, adjColumn)
-    print(type(adjMatrix))
-    print('adjMatrix[0].size() : ', adjMatrix[0].size)
-    print('adjMatrix[1].size() : ', adjMatrix[1].size)
-
-    # # X - Featuremap(list, [31310])
-    # featureEmbedding = ut.objNameEmbedding(xWords)
-    # print('featureEmbedding type : ', type(featureEmbedding))
-    # print('featureEmbedding length : ', len(featureEmbedding))
-
-
-
-'''
-    
-    # X - AdjMatrix(numpy.ndarray, 31310x31310)
-    df_adj, adjMatrix = ut.createAdj(img_id, adjColumn)
     print(type(adjMatrix))
     print('adjMatrix[0].size() : ',adjMatrix[0].size)
     print('adjMatrix[1].size() : ',adjMatrix[1].size)
@@ -85,7 +75,8 @@ def main():
     featureEmbedding = ut.objNameEmbedding(adjColumn)
     print('featureEmbedding type : ',type(featureEmbedding))
     print('featureEmbedding length : ',len(featureEmbedding))
-'''
+    print(featureEmbedding[0:10])
+
 '''
     #YEmbedding -  각 이미지 별 클러스터 값..? 이거 뭘로 Y 값을 만들어야 하지..?
     #원래 아이디어 : 각 이미지 별 클러스터 값, 동일한 지 파악해서 T, F 반환. 이거 1000x1000?

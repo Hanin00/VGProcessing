@@ -10,7 +10,6 @@ from collections import Counter
 
 np.set_printoptions(linewidth=np.inf)
 
-
 ''' 1000개의 이미지의 빈출 objName '''
 def adjColumn(imgCount):
     with open('./data/scene_graphs.json') as file:  # open json file
@@ -20,30 +19,17 @@ def adjColumn(imgCount):
             objects = data[i]["objects"]
             for j in range(len(objects)):  # 이미지의 object 개수만큼 반복
                 object.append(objects[j]['names'])
-
-        # print(object)
-        # print(type(object))
-
         object = sum(object, [])
-        # print(type(object[0]))
-
         count_items = Counter(object)
         frqHundred= count_items.most_common(n=100)
         adjColumn = []
         for i in range(len(frqHundred)):
             adjColumn.append(frqHundred[i][0])
-
-        print(adjColumn)
-
         return adjColumn
-
-
 
 
 ''' adj 생성(이미지 하나에 대한) '''
 def createAdj(imageId, adjColumn):
-
-
     with open('./data/scene_graphs.json') as file:  # open json file
         data = json.load(file)
         # 각 이미지 별로 obj, relationship 가져와서 인접 행렬을 만듦
@@ -98,16 +84,6 @@ def createAdj(imageId, adjColumn):
         return adjMatrix
 
 
-
-
-
-
-
-
-
-
-
-
 ''' 
 Y data 생성을 위해 image에 대한 text description을 이미지 별로 모음
 
@@ -145,7 +121,8 @@ def jsontoxml(imgCnt, jsonpath, xlsxpath) :
 def objNameEmbedding(xWords) :
     a = []
     a.append(xWords)
-    model = FastText(a, vector_size=10, workers=4, sg=1, word_ngrams=1)
+    #model = FastText(a, vector_size=10, workers=4, sg=1, word_ngrams=1)
+    model = FastText(xWords, vector_size=10, workers=4, sg=1, word_ngrams=1)
 
     # for i in a :
     embedding = []
