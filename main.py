@@ -1,4 +1,4 @@
-import util as ut
+import util2 as ut
 import YEmbedding as yed
 import numpy as np
 import torch
@@ -18,6 +18,7 @@ from scipy.sparse import diags
 from scipy.sparse import eye
 from pathlib import Path
 from functools import partial
+import csv
 
 
 
@@ -34,17 +35,46 @@ from functools import partial
 
 
 def main():
+    '''
+        csv 파일로 만들어야 하는 것(이미지 천 개에 대한 데이터들) : region_descriptiong> image_regions
+            columns Name(31310)
+            featuremap(31310)
+            이미지 1000개에 대한 adjMatrix(train 용)
+            > 근데 어차피 다 쓸 거 아니니까 상관 없지 않나 싶기두.. 일부만 할거면.. 걍 만들어놓고 갖다 쓰는게 편하겠지..?
+    '''
     img_id = 1
     img_cnt = 1000
 
-    #textEmbedding하기 위한 이미지별 phrase 모아서 xlsx로 변경
+    adjColumn = ["man", "window", "person", "tree", "building", "shirt", "wall", "woman",
+                 "sign", "sky", "ground", "light", "grass", "clud", "pole", "car", "table",
+                 "leaf", "hand", "leg", "head", "water", "hair", "people", "ear",
+                 "eye", "shoe", "plate", "flower", "line", "wheel", "door",
+                 "glass", "chair", "letter", "pant", "fence", "train", "floor",
+                 "street", "road", "hat", "shadow", "snow", "jacket",
+                 "boy", "boat", "rock", "handle"]
+
+    # textEmbedding하기 위한 이미지별 phrase 모아서 xlsx로 변경
     jsonpath = './data/region_descriptions.json'
     xlxspath = './data/image_regions.xlsx'
     ut.jsontoxml(img_cnt, jsonpath, xlxspath)
 
-
     # obj에 대한 text embedding 값 -> 모든 objName에 대해 동일값 들어감.
-    adjColumn, xWords = ut.adjColumn_kv(img_cnt)
+    # adjColumn, xWords = ut.adjColumn_kv(img_cnt)
+    # X - AdjMatrix(numpy.ndarray, 31310x31310)
+    adjMatrix = ut.createAdj(img_id, adjColumn)
+    print(type(adjMatrix))
+    print('adjMatrix[0].size() : ', adjMatrix[0].size)
+    print('adjMatrix[1].size() : ', adjMatrix[1].size)
+
+    # # X - Featuremap(list, [31310])
+    # featureEmbedding = ut.objNameEmbedding(xWords)
+    # print('featureEmbedding type : ', type(featureEmbedding))
+    # print('featureEmbedding length : ', len(featureEmbedding))
+
+
+
+'''
+    
     # X - AdjMatrix(numpy.ndarray, 31310x31310)
     df_adj, adjMatrix = ut.createAdj(img_id, adjColumn)
     print(type(adjMatrix))
@@ -52,17 +82,17 @@ def main():
     print('adjMatrix[1].size() : ',adjMatrix[1].size)
 
     #X - Featuremap(list, [31310])
-    featureEmbedding = ut.objNameEmbedding(xWords)
+    featureEmbedding = ut.objNameEmbedding(adjColumn)
     print('featureEmbedding type : ',type(featureEmbedding))
     print('featureEmbedding length : ',len(featureEmbedding))
-
-
+'''
+'''
     #YEmbedding -  각 이미지 별 클러스터 값..? 이거 뭘로 Y 값을 만들어야 하지..?
     #원래 아이디어 : 각 이미지 별 클러스터 값, 동일한 지 파악해서 T, F 반환. 이거 1000x1000?
     #feature matrix는 동일하니까?
     #이미지1 X(adj) 값과 이미지1의 클러스터값 + 이미지2(adj)의 X값과 이미지 2의 클러스터값 train set으로 주고,
     #판별 할 때 클러스터 값 동일한 지 여부 파악하게 하면 될 것 같은데 어케하지..?
-
+    embedding_clustering = yed.YEmbedding(xlxspath)
     idCluster = embedding_clustering[['image_id', 'cluster', 'distance_from_centroid']]
 
     print(type(idCluster))
@@ -79,7 +109,7 @@ def main():
 
     papers = paper_features_label[:, 0].astype(np.int32)
     # 걍 1000개 이미지에 대한 Adj 만들고, 위에 idcluster[]에서 호출해서 사용하는 방법으로 써야할 듯.
-
+'''
 
 
 

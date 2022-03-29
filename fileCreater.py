@@ -3,15 +3,34 @@ import csv
 import util as ut
 import os
 import numpy as np
-
-
+import YEmbedding as yed
 
 imgCnt = 1000
 adjColumn, xWords = ut.adjColumn_kv(imgCnt)
 
+
+# textEmbedding하기 위한 이미지별 phrase 모아서 xlsx로 변경
+jsonpath = './data/region_descriptions.json'
+xlxspath = './data/image_regions.xlsx'
+ut.jsontoxml(imgCnt, jsonpath, xlxspath)
+embedding_clustering = yed.YEmbedding(xlxspath)
+
+
+idCluster = embedding_clustering[['image_id', 'cluster', 'distance_from_centroid']]
+alist = [10]
+
 for i in range(10):
     df_adj, adjMatrix = ut.createAdj(i, adjColumn)
-    f1.write(adjMatrix+",")
+    alist.append([adjMatrix, idCluster['cluster'][i]])
+
+    #print(i,"번째 AdjMatrix : ")
+    #print(adjMatrix)
+
+print(alist[0])
+print(alist[3])
+
+
+
 
 '''
 imgCnt = 1000
