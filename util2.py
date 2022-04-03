@@ -21,7 +21,7 @@ def adjColumn(imgCount):
                 object.append(objects[j]['names'])
         object = sum(object, [])
         count_items = Counter(object)
-        frqHundred= count_items.most_common(n=100)
+        frqHundred= count_items.most_common(n=1000)
         adjColumn = []
         for i in range(len(frqHundred)):
             adjColumn.append(frqHundred[i][0])
@@ -67,19 +67,21 @@ def createAdj(imageId, adjColumn):
 
         for i in range(len(dictionary)):
             for j in range(len(object)):
+                objName = ''
+                subName = ''
                 if object[j] in dictionary:
                     objName = dictionary[object[j]]
                 if subject[j] in dictionary:
                     subName = dictionary[subject[j]]
-
-            if (objName != '') & (subName != ''):
-                if (objName in adjColumn) & (subName in adjColumn):
-                    adjI = adjColumn.index(objName)
-                    adjJ = adjColumn.index(subName)
-                    adjMatrix[adjI][adjJ] += 1
-
-            objName = ''
-            subName = ''
+                if (objName != '') & (subName != ''):
+                    if (objName in adjColumn) & (subName in adjColumn):
+                        adjI = adjColumn.index(objName)
+                        adjJ = adjColumn.index(subName)
+                        adjMatrix[adjI][adjJ] += 1
+        for i in range(len(adjMatrix[0])) :
+            for j in range(len(adjMatrix[1])) :
+                if i==j :
+                    adjMatrix[i][j] += 1
 
         return adjMatrix
 

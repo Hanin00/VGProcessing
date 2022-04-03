@@ -20,7 +20,6 @@ from pathlib import Path
 from functools import partial
 
 
-
 def train(imgId, imgCnt, columnName) :
     img_id = 1
     img_cnt = 1000
@@ -30,10 +29,8 @@ def train(imgId, imgCnt, columnName) :
 
     # X - AdjMatrix
     df_adj, adjMatrix = ut.createAdj(img_id, adjColumn)
-
     #X - Featuremap
     featureEmbedding = ut.objNameEmbedding(xWords)
-
     # YEmbedding
     idCluster = embedding_clustering[['image_id', 'cluster', 'distance_from_centroid']]
 
@@ -41,7 +38,6 @@ def train(imgId, imgCnt, columnName) :
 
 
 def test() :
-
     return
 
 

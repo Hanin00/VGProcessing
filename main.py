@@ -20,6 +20,8 @@ from pathlib import Path
 from functools import partial
 import csv
 
+from scipy.sparse import csr_matrix
+
 
 
 
@@ -42,55 +44,37 @@ def main():
             이미지 1000개에 대한 adjMatrix(train 용)
             > 근데 어차피 다 쓸 거 아니니까 상관 없지 않나 싶기두.. 일부만 할거면.. 걍 만들어놓고 갖다 쓰는게 편하겠지..?
     '''
-    img_id = 1
+    img_id = 2
     img_cnt = 1000
 
-    #adjColumn = ut.adjColumn(img_cnt)
+    #featuremap = np.load('./data/idFreFeature.npy')
+    #idAdj = np.load('./data/idAdj.npy')
 
-    adjColumn = ['window', 'building', 'car', 'tree', 'person', 'man', 'wall', 'chair', 'sign', 'woman', 'table', 'light',
-     'sidewalk', 'pole', 'street', 'shirt', 'sky', 'road', 'door', 'water', 'leaves', 'floor', 'tire', 'people', 'line',
-     'leg', 'handle', 'grass', 'desk', 'lamp', 'trees', 'windows', 'plate', 'keyboard', 'head', 'tile', 'shelf',
-     'plant', 'boat', 'book', 'ground', 'bag', 'monitor', 'rock', 'box', 'wheel', 'hair', 'picture', 'jacket', 'pillow',
-     'fence', 'shadow', 'glass', 'bike', 'pants', 'flowers', 'letter', 'van', 'roof', 'cloud', 'cabinet', 'house',
-     'cup', 'brick', 'frame', 'leaf', 'flower', 'umbrella', 'paper', 'counter', 'flag', 'mouse', 'bottle', 'hat',
-     'computer', 'bowl', 'vehicle', 'clouds', 'balcony', 'mirror', 'pot', 'truck', 'books', 'lights', 'ceiling',
-     'bench', 'buildings', 'stripe', 'bush', 'stone', 'post', 'hand', 'lines', 'duck', 'bicycle', 'eye', 'drawer',
-     'cars', 'awning', 'license plate']
 
-    # textEmbedding하기 위한 이미지별 phrase 모아서 xlsx로 변경
-    jsonpath = './data/region_descriptions.json'
-    xlxspath = './data/image_regions.xlsx'
-    ut.jsontoxml(img_cnt, jsonpath, xlxspath)
 
-    # obj에 대한 text embedding 값 -> 모든 objName에 대해 동일값 들어감.
-    # adjColumn, xWords = ut.adjColumn_kv(img_cnt)
 
-    # X - AdjMatrix(numpy.ndarray, 100x100)
-    adjMatrix = ut.createAdj(img_id, adjColumn)
-    print(type(adjMatrix))
-    print('adjMatrix[0].size() : ',adjMatrix[0].size)
-    print('adjMatrix[1].size() : ',adjMatrix[1].size)
+    #빈출 단어 값
+    testFile = open('./data/freObj.txt', 'r')  # 'r' read의 약자, 'rb' read binary 약자 (그림같은 이미지 파일 읽을때)
+    readFile = testFile.readline()
+    label = (readFile[1:-1].replace("'", '').replace(' ', '')).split(',')
+    label= label[:100] #빈출 100 단어 만 사용
 
-    #X - Featuremap(list, [31310])
-    featureEmbedding = ut.objNameEmbedding(adjColumn)
-    print('featureEmbedding type : ',type(featureEmbedding))
-    print('featureEmbedding length : ',len(featureEmbedding))
-    print(featureEmbedding[0:10])
+    # 임베딩값 freObj x embedding(10)
+    feature = ut.objNameEmbedding(label)
+
+
+    adjMatrix = ut.createAdj(1,label)
+    print(adjMatrix)
+    print(adjMatrix[0])
+    print(adjMatrix.shape)
+
+
+
+
+
+
 
 '''
-    #YEmbedding -  각 이미지 별 클러스터 값..? 이거 뭘로 Y 값을 만들어야 하지..?
-    #원래 아이디어 : 각 이미지 별 클러스터 값, 동일한 지 파악해서 T, F 반환. 이거 1000x1000?
-    #feature matrix는 동일하니까?
-    #이미지1 X(adj) 값과 이미지1의 클러스터값 + 이미지2(adj)의 X값과 이미지 2의 클러스터값 train set으로 주고,
-    #판별 할 때 클러스터 값 동일한 지 여부 파악하게 하면 될 것 같은데 어케하지..?
-    embedding_clustering = yed.YEmbedding(xlxspath)
-    idCluster = embedding_clustering[['image_id', 'cluster', 'distance_from_centroid']]
-
-    print(type(idCluster))
-
-
-
-
     #features = csr_matrix(paper_features_label[:, 1:-1], dtype=np.float32)
     features = adjMatrix
     labels = xWords
@@ -101,7 +85,6 @@ def main():
     papers = paper_features_label[:, 0].astype(np.int32)
     # 걍 1000개 이미지에 대한 Adj 만들고, 위에 idcluster[]에서 호출해서 사용하는 방법으로 써야할 듯.
 '''
-
 
 
 

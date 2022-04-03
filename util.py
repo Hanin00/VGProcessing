@@ -26,31 +26,54 @@ def adjColumn(imgCount):
 def createAdj(imageId, adjColumn):
     with open('./data/scene_graphs.json') as file:  # open json file
         data = json.load(file)
-        # 각 이미지 별로 obj, relationship 가져와서 인접 행렬을 만듦
+        # 각 이미지 별로 obj, relationship 가져와서 freObj와 일치하는 obj들 간의 인접 행렬을 만듦
         # 해당 모듈은 이미지 하나에 대한 인접행렬 만듦
 
+        # imgId의 relationship에 따른 objId, subjId list
         # i는 image id
         imageDescriptions = data[imageId]["relationships"]
         object = []
         subject = []
-
         for j in range(len(imageDescriptions)):  # 이미지의 object 개수만큼 반복
             object.append(imageDescriptions[j]['object_id'])
             subject.append(imageDescriptions[j]['subject_id'])
-
+    with open('./data/objects.json') as file:  # open json file
+        data = json.load(file)
+        # 각 이미지 별로 obj, relationship 가져와서 인접 행렬을 만듦
+        # 해당 모듈은 이미지 하나에 대한 인접행렬 만듦
+        # imgId의 relationship에 따른 objId, subjId list
+        # i는 image id
+        # objectId = data[imgId][""]
+        objects = data[imageId]["objects"]
+        objIdName = []
+        for i in range(len(objects)):
+            objectsId = objects[i]["object_id"]
+            objectsName = objects[i]["names"]
+            objIdName.append((objectsId, ''.join(objectsName)))
+        # ObjectName은 list 형태임. 여러 개의 이름을 갖는 경우가 있음. 그래서 list에 있는지로 파악해야함
+        dictionary = dict(objIdName)
         adjMatrix = np.zeros((len(adjColumn), len(adjColumn)))
-        data_df = pd.DataFrame(adjMatrix)
-        data_df.columns = adjColumn
-        data_df = data_df.transpose()
-        data_df.columns = adjColumn
+        # np.set_printoptions(threshold=784, linewidth=np.inf)
 
-        # ralationship에 따른
-        for q in range(len(object)):
-            row = adjColumn.index(object[q])
-            column = adjColumn.index(subject[q])
-            adjMatrix[column][row] += 1
+        for i in range(len(dictionary)):
+            for j in range(len(object)):
+                objName = ''
+                subName = ''
+                # obj 또는 sub 둘 중 하나만 freObj에 있는 경우
+                if object[j] in dictionary:
+                    objName = dictionary[object[j]]
+                if subject[j] in dictionary:
+                    subName = dictionary[subject[j]]
+                    print("subName : ", subName)
 
-        return data_df, adjMatrix
+                # obj-subj 모두 freObj에 있는 경우
+                if (objName != '') & (subName != ''):
+                    if (objName in adjColumn) & (subName in adjColumn):
+                        adjI = adjColumn.index(objName)
+                        adjJ = adjColumn.index(subName)
+                        adjMatrix[adjI][adjJ] += 1
+    return adjMatrix
+
 
 
 ''' 
